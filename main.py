@@ -45,8 +45,8 @@ class HeartVisualization(QGLWidget):
         return x, y, z
 
     def generate_heart_mesh(self):
-        u = np.linspace(0, 2 * np.pi, 30)  # 0에서 2π까지
-        v = np.linspace(0, np.pi, 30)  # 0에서 π까지
+        u = np.linspace(0, 2 * np.pi, 30)  # 0 ~ 2π
+        v = np.linspace(0, np.pi, 30)  # 0 ~ π
         u, v = np.meshgrid(u, v)
 
         x, y, z = self.heart_function(u, v)
@@ -71,26 +71,23 @@ class HeartVisualization(QGLWidget):
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
         glLoadIdentity()
 
-        # 카메라 이동
+        # 카메라
         glTranslatef(0, 0, self.translate_z)
 
-        # 회전 및 스케일링 적용
         glRotatef(self.rotation_x, 1, 0, 0)
         glRotatef(self.rotation_y, 0, 1, 0)
         glScalef(self.scale, self.scale, self.scale)
 
         vertices, faces = self.generate_heart_mesh()
 
-        # 하트 표면 그리기
         glBegin(GL_TRIANGLES)
         for face in faces:
-            glColor4f(0.9, 0.1, 0.1, 0.8)  # 약간의 투명도를 추가
+            glColor4f(0.9, 0.1, 0.1, 0.8)  # 약간의 투명도
             for vertex_idx in face:
                 glVertex3fv(vertices[vertex_idx])
         glEnd()
 
-        # 선 연결
-        glColor4f(0.0, 0.0, 0.0, 1.0)  # 검은색 선
+        glColor4f(0.0, 0.0, 0.0, 1.0)  # 검은선
         glBegin(GL_LINES)
         for face in faces:
             for i in range(3):
